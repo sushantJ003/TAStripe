@@ -11,14 +11,14 @@ import ObjectMapper
 import SVProgressHUD
 import SwiftyJSON
 
-class ViewController: UIViewController {
+public class TAStripeController: UIViewController {
 
     var cardField = STPPaymentCardTextField()
     @IBOutlet weak var btnPayNow: UIButton!
     
     var customerModel : CustomerModel = ModelManager.sharedInstance.getCustomerModel([:])
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         self.setupCardTextField()
@@ -49,7 +49,7 @@ class ViewController: UIViewController {
 
 
 // MARK: Button actions
-extension ViewController {
+extension TAStripeController {
     @IBAction func btnPayNowClicked(_ sender: Any) {
         print("btnPayNowClicked")
         
@@ -99,8 +99,8 @@ extension ViewController {
 }
 
 // MARK: STPPaymentCardTextFieldDelegate
-extension ViewController : STPPaymentCardTextFieldDelegate {
-    func paymentCardTextFieldDidChange(_ textField: STPPaymentCardTextField) {
+extension TAStripeController : STPPaymentCardTextFieldDelegate {
+    public func paymentCardTextFieldDidChange(_ textField: STPPaymentCardTextField) {
         btnPayNow.isHidden = !textField.isValid
     }
 }
