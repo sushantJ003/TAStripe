@@ -33,7 +33,8 @@ let package = Package(
                 .product(name: "ObjectMapper", package: "ObjectMapper"),
                 .product(name: "SVProgressHUD", package: "SVProgressHUD"),
                 .product(name: "Alamofire", package: "Alamofire"),
-                .product(name: "SwiftyJSON", package: "SwiftyJSON")]),
+                .product(name: "SwiftyJSON", package: "SwiftyJSON")],
+            resources: [.process("Resources")]),
         .testTarget(
             name: "TAStripeTests",
             dependencies: ["TAStripe"]),
