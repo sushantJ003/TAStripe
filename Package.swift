@@ -34,7 +34,7 @@ let package = Package(
                 .product(name: "SVProgressHUD", package: "SVProgressHUD"),
                 .product(name: "Alamofire", package: "Alamofire"),
                 .product(name: "SwiftyJSON", package: "SwiftyJSON")],
-            resources: [.process("Resources")]),
+            resources: [.process("Resources/Storyboard.storyboard")]),
         .testTarget(
             name: "TAStripeTests",
             dependencies: ["TAStripe"]),
