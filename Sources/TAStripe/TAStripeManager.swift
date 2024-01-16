@@ -8,6 +8,10 @@
 import Foundation
 import Stripe
 
+public class StripeBundle {
+   public static let module = Bundle.module
+}
+
 public enum Manager {
     
     public static func setup(publishableKey: String, appleMerchantIdentifier: String, companyName: String) {
