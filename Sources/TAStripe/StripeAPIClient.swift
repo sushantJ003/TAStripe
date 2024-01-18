@@ -14,7 +14,7 @@ import UIKit
 class StripeAPIClient: NSObject, STPCustomerEphemeralKeyProvider {
 
     static let shared = StripeAPIClient()
-    var baseURLString: String? = "http://**********"
+    var baseURLString: String? = "https://example-terminal-backend-s0ou.onrender.com"
     var baseURL: URL {
         if let urlString = self.baseURLString, let url = URL(string: urlString) {
             return url
