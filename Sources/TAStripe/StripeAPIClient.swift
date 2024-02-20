@@ -10,11 +10,13 @@ import Alamofire
 import SwiftyJSON
 import Stripe
 import UIKit
+import StripePaymentSheet
 
 class StripeAPIClient: NSObject, STPCustomerEphemeralKeyProvider {
 
-    static let shared = StripeAPIClient()
-    var baseURLString: String? = "http://localhost:4567"
+//    static let shared = StripeAPIClient()
+    var paymentSheet: PaymentSheet?
+    var baseURLString: String? = "https://equal-sunset-fern.glitch.me/"
     var baseURL: URL {
         if let urlString = self.baseURLString, let url = URL(string: urlString) {
             return url
@@ -52,6 +54,54 @@ class StripeAPIClient: NSObject, STPCustomerEphemeralKeyProvider {
                     failure(JSON(error))
                 }
         }
+    }
+    
+//    public func startCheckout<T: Codable>(param: T, completion: @escaping (String?) -> Void) {
+//        let url = self.baseURL.appendingPathComponent("payment-sheet")
+//        
+//        AF.request(url, method: .post, parameters: param)
+//            .validate(statusCode: 200..<300)
+//            .responseJSON { responseJSON in
+//                switch responseJSON.result {
+//                case .success(let response):
+//                    let jsonResponse = JSON(response)
+//                    print(jsonResponse)
+//                case .failure(let error):
+//                    completion(nil)
+//                }
+//        }
+//    }
+    
+    public func startCheckout(completion: @escaping () -> Void) {
+        let url = self.baseURL.appendingPathComponent("payment-sheet")
+        // MARK: Fetch the PaymentIntent client secret, Ephemeral Key secret, Customer ID, and publishable key
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { [weak self] (data, response, error) in
+            guard let data = data,
+                  let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
+                  let customerId = json["customer"] as? String,
+                  let customerEphemeralKeySecret = json["ephemeralKey"] as? String,
+                  let paymentIntentClientSecret = json["paymentIntent"] as? String,
+                  let publishableKey = json["publishableKey"] as? String,
+                  let self = self else {
+                // Handle error
+                return
+            }
+            
+            STPAPIClient.shared.publishableKey = publishableKey
+            // MARK: Create a PaymentSheet instance
+            var configuration = PaymentSheet.Configuration()
+            configuration.merchantDisplayName = "Example, Inc."
+            configuration.customer = .init(id: customerId, ephemeralKeySecret: customerEphemeralKeySecret)
+            // Set `allowsDelayedPaymentMethods` to true if your business handles
+            // delayed notification payment methods like US bank accounts.
+            configuration.allowsDelayedPaymentMethods = true
+            self.paymentSheet = PaymentSheet(paymentIntentClientSecret: paymentIntentClientSecret, configuration: configuration)  
+            completion()
+        })
+        task.resume()
+    
     }
 
     func getCustomer(_ email: String, name: String, success:@escaping (_ responseObject:JSON) -> Void , failure:@escaping (_ errorResponse:JSON?) -> Void) {

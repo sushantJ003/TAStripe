@@ -14,87 +14,113 @@ import SwiftyJSON
 public class TAStripeController: UIViewController {
 
     var cardField = STPPaymentCardTextField()
+    var stripeClient: StripeAPIClient?
     @IBOutlet weak var btnPayNow: UIButton!
     
     var customerModel : CustomerModel = ModelManager.sharedInstance.getCustomerModel([:])
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.setupCardTextField()
+        stripeClient = StripeAPIClient()
+        self.setupPaymentSheet()
     }
     
-    func setupCardTextField() {
-        print("Setup card textfield and set frame according to UI")
-        cardField.frame = CGRect(x: 20, y: 200, width: self.view.frame.size.width - 40, height: 60)
-        cardField.delegate = self
-        
-        self.view.addSubview(cardField)
-        btnPayNow.isHidden = true;
-        
-        print("Create/Get customer from Stripe using backend server api call (I have used PHP)")
-        
-        SVProgressHUD.show(withStatus: "Please wait\nCustomer is going to create in stripe")
-        StripeAPIClient.shared.getCustomer("mehul@gmail.com", name: "mehul", success: { (response) in
-            SVProgressHUD.showSuccess(withStatus: "Customer created..")
-            
-            print("We have recieved Customer detals, and we will pass it in charge api when needed.")
-            self.customerModel = ModelManager.sharedInstance.getCustomerModel((ModelManager.sharedInstance.getResponseDataModel(response.dictionaryObject! as NSDictionary)).data as! NSDictionary)
-            print("Customer details :\(self.customerModel.toJSONString(prettyPrint: true) ?? "no data found")")
-        }) { (error) in
-            print(error ?? "some error")
+    func setupPaymentSheet() {
+        stripeClient?.startCheckout { [weak self] in
+            guard let self = self else {
+               return
+            }
+
+            if let sheet = stripeClient?.paymentSheet {
+                
+                DispatchQueue.main.async {
+                    sheet.present(from: self) { paymentResult in
+                        // MARK: Handle the payment result
+                        switch paymentResult {
+                        case .completed:
+                            print("Your order is confirmed")
+                        case .canceled:
+                            print("Canceled!")
+                        case .failed(let error):
+                            print("Payment failed: \(error)")
+                        }
+                    }
+                }
+            }
         }
     }
+    
+//    func setupCardTextField() {
+//        print("Setup card textfield and set frame according to UI")
+//        cardField.frame = CGRect(x: 20, y: 200, width: self.view.frame.size.width - 40, height: 60)
+//        cardField.delegate = self
+//        
+//        self.view.addSubview(cardField)
+//        btnPayNow.isHidden = true;
+//        
+//        print("Create/Get customer from Stripe using backend server api call (I have used PHP)")
+//        
+//        SVProgressHUD.show(withStatus: "Please wait\nCustomer is going to create in stripe")
+//        StripeAPIClient.shared.getCustomer("mehul@gmail.com", name: "mehul", success: { (response) in
+//            SVProgressHUD.showSuccess(withStatus: "Customer created..")
+//            
+//            print("We have recieved Customer detals, and we will pass it in charge api when needed.")
+//            self.customerModel = ModelManager.sharedInstance.getCustomerModel((ModelManager.sharedInstance.getResponseDataModel(response.dictionaryObject! as NSDictionary)).data as! NSDictionary)
+//            print("Customer details :\(self.customerModel.toJSONString(prettyPrint: true) ?? "no data found")")
+//        }) { (error) in
+//            print(error ?? "some error")
+//        }
+//    }
 }
 
 
 // MARK: Button actions
 extension TAStripeController {
-    @IBAction func btnPayNowClicked(_ sender: Any) {
-        print("btnPayNowClicked")
-        
-        cardField.resignFirstResponder()
-        
-        print("Get token using card details")
-        
-        let cardParams: STPCardParams = STPCardParams()
-        cardParams.number = cardField.cardNumber
-        cardParams.expMonth = UInt(cardField.expirationMonth)
-        cardParams.expYear = UInt(cardField.expirationYear)
-        cardParams.cvc = cardField.cvc
-        
-        SVProgressHUD.show(withStatus: "Please wait\nWe will receive token from stripe")
-
-        STPAPIClient.shared.createToken(withCard: cardParams) { (token, error) in
-            SVProgressHUD.showSuccess(withStatus: "Card token received..")
-
-            print("STPAPIClient token: \(token?.tokenId ?? "No token received")")
-            if let error = error {
-                print(error)
-            }
-            else if let token = token {
-                print("Card token received :\(JSON(token.allResponseFields))")
-                
-                print("In backend, Call charge api of stripe")
-                SVProgressHUD.show(withStatus: "Please wait\nCard charge is in process")
-
-                let description = "Charge by \(self.customerModel.description!) using email id: \(self.customerModel.email!)"
-                StripeAPIClient.shared.completeChargeForCustomTextField(token.tokenId, customerID: self.self.customerModel.id!, amount: 12345, currency: "gbp", description: description, success:
-                    { (json) in
-                        SVProgressHUD.showSuccess(withStatus: "Card has been charged..")
-
-                        print(description)
-                        let jsonTemp = JSON(json as Any)
-                        if let detail = jsonTemp.dictionaryObject {
-                            print("Card has been charged :\(detail)")
-                        }
-                }, failure: { (errorJson) in
-                    print("error in completeChargeForCustomTextField")
-                    print(errorJson ?? "its a error")
-                })
-            }
-        }
-    }
+//    @IBAction func btnPayNowClicked(_ sender: Any) {
+//        print("btnPayNowClicked")
+//        
+//        cardField.resignFirstResponder()
+//        
+//        print("Get token using card details")
+//        
+//        let cardParams: STPCardParams = STPCardParams()
+//        cardParams.number = cardField.cardNumber
+//        cardParams.expMonth = UInt(cardField.expirationMonth)
+//        cardParams.expYear = UInt(cardField.expirationYear)
+//        cardParams.cvc = cardField.cvc
+//        
+//        SVProgressHUD.show(withStatus: "Please wait\nWe will receive token from stripe")
+//
+//        STPAPIClient.shared.createToken(withCard: cardParams) { (token, error) in
+//            SVProgressHUD.showSuccess(withStatus: "Card token received..")
+//
+//            print("STPAPIClient token: \(token?.tokenId ?? "No token received")")
+//            if let error = error {
+//                print(error)
+//            }
+//            else if let token = token {
+//                print("Card token received :\(JSON(token.allResponseFields))")
+//                
+//                print("In backend, Call charge api of stripe")
+//                SVProgressHUD.show(withStatus: "Please wait\nCard charge is in process")
+//
+//                let description = "Charge by \(self.customerModel.description!) using email id: \(self.customerModel.email!)"
+//                StripeAPIClient.shared.completeChargeForCustomTextField(token.tokenId, customerID: self.self.customerModel.id!, amount: 12345, currency: "gbp", description: description, success:
+//                    { (json) in
+//                        SVProgressHUD.showSuccess(withStatus: "Card has been charged..")
+//
+//                        print(description)
+//                        let jsonTemp = JSON(json as Any)
+//                        if let detail = jsonTemp.dictionaryObject {
+//                            print("Card has been charged :\(detail)")
+//                        }
+//                }, failure: { (errorJson) in
+//                    print("error in completeChargeForCustomTextField")
+//                    print(errorJson ?? "its a error")
+//                })
+//            }
+//        }
+//    }
 
 }
 

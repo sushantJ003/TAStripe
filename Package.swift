@@ -30,6 +30,7 @@ let package = Package(
         .target(
             name: "TAStripe", dependencies: [
                 .product(name: "Stripe", package: "stripe-ios-spm"),
+                .product(name: "StripePaymentSheet", package: "stripe-ios-spm"),
                 .product(name: "ObjectMapper", package: "ObjectMapper"),
                 .product(name: "SVProgressHUD", package: "SVProgressHUD"),
                 .product(name: "Alamofire", package: "Alamofire"),
