@@ -30,9 +30,6 @@
                             <constraint firstItem="9cO-NO-djX" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="k1S-OL-kUq"/>
                         </constraints>
                     </view>
-                    <connections>
-                        <outlet property="btnPayNow" destination="9cO-NO-djX" id="0s9-Vs-2Nt"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
