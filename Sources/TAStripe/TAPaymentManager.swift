@@ -13,23 +13,20 @@ public enum PaymentMode {
     case paypal
 }
 
-public struct TAPaymentManager {
+public class TAPaymentManager {
     static public let shared = TAPaymentManager()
     var mode: PaymentMode = .paypal
     
     private init(){}
     
-    public mutating func setup(publishableKey: String, appleMerchantIdentifier: String, companyName: String, paymentMode: PaymentMode) {
+    public func setup(companyName: String, paymentMode: PaymentMode) {
         
         mode = paymentMode
         
         switch paymentMode {
         case .stripe:
-            STPAPIClient.shared.publishableKey = publishableKey
-            
-            STPPaymentConfiguration.shared.appleMerchantIdentifier = appleMerchantIdentifier
-            
             STPPaymentConfiguration.shared.companyName = companyName
+            
         case .paypal:
             break
         }
