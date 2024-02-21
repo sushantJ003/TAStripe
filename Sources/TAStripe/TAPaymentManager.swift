@@ -14,9 +14,12 @@ public enum PaymentMode {
 }
 
 public struct TAPaymentManager {
-    var mode: PaymentMode = .stripe
+    static let shared = TAPaymentManager()
+    var mode: PaymentMode = .paypal
     
-    public init(publishableKey: String, appleMerchantIdentifier: String, companyName: String, paymentMode: PaymentMode) {
+    private init(){}    
+    
+    public mutating func setup(publishableKey: String, appleMerchantIdentifier: String, companyName: String, paymentMode: PaymentMode) {
         
         mode = paymentMode
         
