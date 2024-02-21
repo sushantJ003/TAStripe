@@ -21,7 +21,8 @@ let package = Package(
         .package(url: "https://github.com/stripe/stripe-ios-spm", from: "23.20.0"),
         .package(url: "https://github.com/tristanhimmelman/ObjectMapper.git", .upToNextMajor(from: "4.1.0")),
         .package(url: "https://github.com/SVProgressHUD/SVProgressHUD.git", .upToNextMajor(from: "2.3.1")),
-        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.8.1"))
+        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.8.1")),
+        .package(url: "https://github.com/SwiftyJSON/SwiftyJSON.git", from: "4.0.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -32,7 +33,8 @@ let package = Package(
                 .product(name: "StripePaymentSheet", package: "stripe-ios-spm"),
                 .product(name: "ObjectMapper", package: "ObjectMapper"),
                 .product(name: "SVProgressHUD", package: "SVProgressHUD"),
-                .product(name: "Alamofire", package: "Alamofire")],
+                .product(name: "Alamofire", package: "Alamofire"),
+                .product(name: "SwiftyJSON", package: "SwiftyJSON")],
             resources: [.process("Resources/Storyboard.storyboard")]),
         .testTarget(
             name: "TAStripeTests",
