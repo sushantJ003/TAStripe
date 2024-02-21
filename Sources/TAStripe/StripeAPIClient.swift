@@ -72,8 +72,10 @@ class StripeAPIClient: NSObject, STPCustomerEphemeralKeyProvider {
                 // Handle error
                 return
             }
-            
+            print(json)
             STPAPIClient.shared.publishableKey = publishableKey
+            
+            
             // MARK: Create a PaymentSheet instance
             var configuration = PaymentSheet.Configuration()
             configuration.merchantDisplayName = "Example, Inc."
@@ -81,7 +83,8 @@ class StripeAPIClient: NSObject, STPCustomerEphemeralKeyProvider {
             // Set `allowsDelayedPaymentMethods` to true if your business handles
             // delayed notification payment methods like US bank accounts.
             configuration.allowsDelayedPaymentMethods = true
-            self.paymentSheet = PaymentSheet(paymentIntentClientSecret: paymentIntentClientSecret, configuration: configuration)  
+            self.paymentSheet = PaymentSheet(paymentIntentClientSecret: paymentIntentClientSecret, configuration: configuration)
+            print(paymentIntentClientSecret)
             completion()
         })
         task.resume()
