@@ -24,37 +24,6 @@ class StripeAPIClient: NSObject, STPCustomerEphemeralKeyProvider {
             fatalError()
         }
     }
-
-    func completeChargeForCustomTextField(_
-        token: String,
-        customerID: String,
-        amount: Int,
-        currency: String,
-        description: String,
-        success:@escaping (_ responseObject:JSON) -> Void , failure:@escaping (_ errorResponse:JSON?) -> Void){
-        
-        let url = self.baseURL.appendingPathComponent("create_transaction")
-        let params: [String: Any] = [
-            "source_token": token,
-            "source_amount": amount,
-            "source_customer": customerID,
-            "source_currency": currency,
-            "source_description": description
-        ]
-        
-        print(params)
-        
-        AF.request(url, method: .post, parameters: params)
-            .validate(statusCode: 200..<300)
-            .responseJSON { responseJSON in
-                switch responseJSON.result {
-                case .success(let response):
-                    success(JSON(response))
-                case .failure(let error):
-                    failure(JSON(error))
-                }
-        }
-    }
     
     public func startCheckout(completion: @escaping () -> Void) {
         let url = self.baseURL.appendingPathComponent("payment-sheet")
@@ -72,9 +41,8 @@ class StripeAPIClient: NSObject, STPCustomerEphemeralKeyProvider {
                 // Handle error
                 return
             }
-            print(json)
-            STPAPIClient.shared.publishableKey = publishableKey
             
+            STPAPIClient.shared.publishableKey = publishableKey
             
             // MARK: Create a PaymentSheet instance
             var configuration = PaymentSheet.Configuration()
