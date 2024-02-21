@@ -5,7 +5,7 @@
 //  Created by Sushant Jugran on 21/02/24.
 //
 
-import Foundation
+import UIKit
 import Stripe
 
 public enum PaymentMode {
@@ -30,5 +30,19 @@ public class TAPaymentManager {
         case .paypal:
             break
         }
+    }
+    
+    public var getPaymentController: UIViewController {
+        switch mode {
+        case .stripe:
+            guard let viewController = UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? TAStripeController else {
+                fatalError("ViewController not implemented in storyboard")
+            }
+            return viewController
+            
+        case .paypal:
+            return UIViewController()
+        }
+        
     }
 }
