@@ -13,6 +13,7 @@ import SwiftyJSON
 
 public class TAStripeController: UIViewController {
     var stripeClient: StripeAPIClient?
+    @IBOutlet weak var statusLabel: UILabel!
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,10 +35,13 @@ public class TAStripeController: UIViewController {
                         switch paymentResult {
                         case .completed:
                             print("Your order is confirmed")
+                            self.statusLabel.text = "Payment completed"
                         case .canceled:
                             print("Canceled!")
+                            self.statusLabel.text = "Payment canceled"
                         case .failed(let error):
                             print("Payment failed: \(error)")
+                            self.statusLabel.text = "Payment failed"
                         }
                     }
                 }

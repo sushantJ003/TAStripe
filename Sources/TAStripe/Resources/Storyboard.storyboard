@@ -17,19 +17,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9cO-NO-djX">
-                                <rect key="frame" x="151.66666666666666" y="408.66666666666669" width="90" height="35"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Pay Now"/>
-                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uBl-T5-WIa">
+                                <rect key="frame" x="196.66666666666666" y="426" width="0.0" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="9cO-NO-djX" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="78D-Y5-zJA"/>
-                            <constraint firstItem="9cO-NO-djX" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="k1S-OL-kUq"/>
+                            <constraint firstItem="uBl-T5-WIa" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="Jls-yb-tEv"/>
+                            <constraint firstItem="uBl-T5-WIa" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="jeC-iR-m4x"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="statusLabel" destination="uBl-T5-WIa" id="x8o-hb-E8r"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
