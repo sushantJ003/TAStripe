@@ -8,15 +8,11 @@
 import Foundation
 import Stripe
 
-public class StripeBundle {
-   public static let module = Bundle.module
-}
 
-public enum Manager {
+
+public enum StripeManager {
     
-    public static func setup(publishableKey: String, appleMerchantIdentifier: String, companyName: String) {
-        
-        STPAPIClient.shared.publishableKey = publishableKey
+    static func setup(appleMerchantIdentifier: String, companyName: String) {
         
         STPPaymentConfiguration.shared.appleMerchantIdentifier = appleMerchantIdentifier
         

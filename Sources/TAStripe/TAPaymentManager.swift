@@ -8,6 +8,10 @@
 import UIKit
 import Stripe
 
+public class StripeBundle {
+   public static let module = Bundle.module
+}
+
 public enum PaymentMode {
     case stripe
     case paypal
@@ -19,14 +23,13 @@ public class TAPaymentManager {
     
     private init(){}
     
-    public func setup(companyName: String, paymentMode: PaymentMode) {
+    public func setup(companyName: String, appleMerchantIdentifier: String, paymentMode: PaymentMode) {
         
         mode = paymentMode
         
         switch paymentMode {
-        case .stripe:
-            STPPaymentConfiguration.shared.companyName = companyName
-            
+        case .stripe:            
+            StripeManager.setup(appleMerchantIdentifier: appleMerchantIdentifier, companyName: companyName)
         case .paypal:
             break
         }
