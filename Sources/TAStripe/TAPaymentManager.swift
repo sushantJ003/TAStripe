@@ -19,19 +19,20 @@ public enum PaymentMode {
 
 public class TAPaymentManager {
     static public let shared = TAPaymentManager()
-    var mode: PaymentMode = .paypal
+    var mode: PaymentMode = .stripe
     
     private init(){}
     
-    public func setup(companyName: String, appleMerchantIdentifier: String, paymentMode: PaymentMode) {
+    public func setup(companyName: String, appleMerchantIdentifier: String, clientId: String = String(), paymentMode: PaymentMode, environment: PaypalPaymentEnvironment) {
         
         mode = paymentMode
         
         switch paymentMode {
         case .stripe:            
-            StripeManager.setup(appleMerchantIdentifier: appleMerchantIdentifier, companyName: companyName)
+            StripeManager().setup(appleMerchantIdentifier: appleMerchantIdentifier, companyName: companyName)
+            
         case .paypal:
-            break
+            PaypalManager.shared.setup(_clientID: clientId, environment: environment)
         }
     }
     

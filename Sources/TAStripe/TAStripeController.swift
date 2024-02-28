@@ -1,27 +1,34 @@
 //
 //  ViewController.swift
-//  
+//
 //
 //  Created by Sushant Jugran on 15/01/24.
 //
 
 import UIKit
 import Stripe
-import ObjectMapper
-import SVProgressHUD
-import SwiftyJSON
+import PayPalNativePayments
+import CorePayments
 
 public class TAStripeController: UIViewController {
     var stripeClient: StripeAPIClient?
+    
     @IBOutlet weak var statusLabel: UILabel!
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        stripeClient = StripeAPIClient()
-        self.setupPaymentSheet()
+        
+        
+        switch TAPaymentManager.shared.mode {
+        case .stripe:
+            stripeClient = StripeAPIClient()
+            self.setupStripeCheckout()
+        case .paypal:
+            self.startPaypalCheckout()
+        }
     }
     
-    func setupPaymentSheet() {
+    func setupStripeCheckout() {
         stripeClient?.startCheckout { [weak self] in
             guard let self = self else {
                 return
@@ -39,12 +46,37 @@ public class TAStripeController: UIViewController {
                         case .canceled:
                             print("Canceled!")
                             self.statusLabel.text = "Payment canceled"
-                        case .failed(let error):                            
+                        case .failed(let error):
+                            self.statusLabel.text = "Payment failed"
                             self.statusLabel.text = "Payment failed: \(error)"
                         }
                     }
                 }
             }
         }
+    }
+    
+    func startPaypalCheckout() {
+        PaypalManager.shared.payPalNativeClient?.delegate = self
+        PaypalManager.shared.initialisePayment()
+    }
+}
+
+extension TAStripeController: PayPalNativeCheckoutDelegate {
+    
+    public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithError error: CoreSDKError) {
+        
+    }
+    
+    public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithResult result: PayPalNativeCheckoutResult) {
+        
+    }
+     
+    public func paypalDidCancel(_ payPalClient: PayPalNativePayments.PayPalNativeCheckoutClient) {
+        
+    }
+    
+    public func paypalWillStart(_ payPalClient: PayPalNativePayments.PayPalNativeCheckoutClient) {
+        
     }
 }

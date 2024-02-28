@@ -8,11 +8,9 @@
 import Foundation
 import Stripe
 
-
-
-public enum StripeManager {
+class StripeManager {
     
-    static func setup(appleMerchantIdentifier: String, companyName: String) {
+    func setup(appleMerchantIdentifier: String, companyName: String) {
         
         STPPaymentConfiguration.shared.appleMerchantIdentifier = appleMerchantIdentifier
         
