@@ -16,7 +16,7 @@ public class TAStripeController: UIViewController {
     @IBOutlet weak var statusLabel: UILabel!
     
     public override func viewDidLoad() {
-        super.viewDidLoad()        
+        super.viewDidLoad()
         switch TAPaymentManager.shared.mode {
         case .stripe:
             stripeClient = StripeAPIClient()
@@ -63,13 +63,13 @@ public class TAStripeController: UIViewController {
 extension TAStripeController: PayPalNativeCheckoutDelegate {
     
     public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithError error: CoreSDKError) {
-        
+        print(error)
     }
     
     public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithResult result: PayPalNativeCheckoutResult) {
-        
+        print(result)
     }
-     
+    
     public func paypalDidCancel(_ payPalClient: PayPalNativePayments.PayPalNativeCheckoutClient) {
         
     }
