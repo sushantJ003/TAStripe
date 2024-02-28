@@ -17,7 +17,7 @@ public class TAStripeController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-                
+        print("===Starting paypal checkout=====")
         switch TAPaymentManager.shared.mode {
         case .stripe:
             stripeClient = StripeAPIClient()
@@ -56,7 +56,6 @@ public class TAStripeController: UIViewController {
     }
     
     func startPaypalCheckout() {
-        print("===Starting paypal checkout=====")
         PaypalManager.shared.payPalNativeClient?.delegate = self
         PaypalManager.shared.initialisePayment()
     }
