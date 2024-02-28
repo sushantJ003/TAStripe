@@ -23,4 +23,19 @@ struct PaypalAPIClient {
         })
         task.resume()
     }
+    
+    func captureOrder(orderId: String) {
+        guard let url = URL(string: "https://tabby-aeolian-ophthalmologist.glitch.me//api/orders/\(orderId)/capture") else {return}
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {(data, response, error) in
+            guard let data = data,
+                  let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any]
+                   else {
+                return
+            }
+            print(json)
+        })
+        task.resume()
+    }
 }

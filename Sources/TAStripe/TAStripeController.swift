@@ -67,7 +67,7 @@ extension TAStripeController: PayPalNativeCheckoutDelegate {
     }
     
     public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithResult result: PayPalNativeCheckoutResult) {
-        print(result)
+        PaypalManager.shared.captureOrder(orderId: result.orderID)        
     }
     
     public func paypalDidCancel(_ payPalClient: PayPalNativePayments.PayPalNativeCheckoutClient) {

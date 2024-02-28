@@ -31,7 +31,7 @@ class PaypalManager {
         payPalNativeClient = PayPalNativeCheckoutClient(config: config)
     }
     
-    func initialisePayment() {        
+    func initialisePayment() {
         PaypalAPIClient().getOrderId { orderId in
             guard let orderId = orderId else { return }
             let request = PayPalNativeCheckoutRequest(orderID: orderId)
@@ -39,5 +39,9 @@ class PaypalManager {
                 await self.payPalNativeClient?.start(request: request)
             }
         }
+    }
+    
+    func captureOrder(orderId: String) {
+        PaypalAPIClient().captureOrder(orderId: orderId)
     }
 }
