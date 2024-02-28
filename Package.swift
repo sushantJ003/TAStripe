@@ -16,8 +16,7 @@ let package = Package(
             targets: ["TAStripe"]),
     ],
     dependencies: [
-            // Dependencies declare other packages that this package depends on.
-        
+        // Dependencies declare other packages that this package depends on.        
         .package(url: "https://github.com/stripe/stripe-ios-spm", from: "23.20.0"),
         .package(url: "https://github.com/tristanhimmelman/ObjectMapper.git", .upToNextMajor(from: "4.1.0")),
         .package(url: "https://github.com/SVProgressHUD/SVProgressHUD.git", .upToNextMajor(from: "2.3.1")),
@@ -34,7 +33,6 @@ let package = Package(
                 .product(name: "SVProgressHUD", package: "SVProgressHUD"),
                 .product(name: "PayPalNativePayments", package: "paypal-ios"),
                 .product(name: "CorePayments", package: "paypal-ios")
-                
             ],
             resources: [.process("Resources/Storyboard.storyboard")]),
         .testTarget(

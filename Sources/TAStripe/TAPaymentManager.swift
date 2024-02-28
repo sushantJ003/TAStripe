@@ -37,16 +37,9 @@ public class TAPaymentManager {
     }
     
     public var getPaymentController: UIViewController {
-        switch mode {
-        case .stripe:
-            guard let viewController = UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? TAStripeController else {
-                fatalError("ViewController not implemented in storyboard")
-            }
-            return viewController
-            
-        case .paypal:
-            return UIViewController()
+        guard let viewController = UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? TAStripeController else {
+            fatalError("ViewController not implemented in storyboard")
         }
-        
+        return viewController
     }
 }

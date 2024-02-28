@@ -16,8 +16,7 @@ public class TAStripeController: UIViewController {
     @IBOutlet weak var statusLabel: UILabel!
     
     public override func viewDidLoad() {
-        super.viewDidLoad()
-        print("===Starting paypal checkout=====")
+        super.viewDidLoad()        
         switch TAPaymentManager.shared.mode {
         case .stripe:
             stripeClient = StripeAPIClient()
