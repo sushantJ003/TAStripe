@@ -46,7 +46,7 @@ public class TAStripeController: UIViewController {
                             self.statusLabel.text = "Payment canceled"
                         case .failed(let error):
                             self.statusLabel.text = "Payment failed"
-                            self.statusLabel.text = "Payment failed: \(error)"
+                            print(error.localizedDescription)
                         }
                     }
                 }
