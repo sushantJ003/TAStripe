@@ -36,19 +36,8 @@ public class TAStripeController: UIViewController {
                 
                 DispatchQueue.main.async {
                     sheet.present(from: self) { paymentResult in
+                        StripeManager.shared.prepareResult(sheetResult: paymentResult)
                         
-                        // MARK: Handle the payment result
-                        switch paymentResult {
-                        case .completed:
-                            print("Your order is confirmed")
-                            self.statusLabel.text = "Payment completed"
-                        case .canceled:
-                            print("Canceled!")
-                            self.statusLabel.text = "Payment canceled"
-                        case .failed(let error):
-                            self.statusLabel.text = "Payment failed"
-                            print(error.localizedDescription)
-                        }
                     }
                 }
             }
