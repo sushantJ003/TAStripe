@@ -36,6 +36,7 @@ public class TAStripeController: UIViewController {
                 
                 DispatchQueue.main.async {
                     sheet.present(from: self) { paymentResult in
+                        
                         // MARK: Handle the payment result
                         switch paymentResult {
                         case .completed:

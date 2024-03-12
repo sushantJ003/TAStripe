@@ -7,6 +7,7 @@
 
 import UIKit
 import Stripe
+import StripePaymentSheet
 
 public class StripeBundle {
    public static let module = Bundle.module
@@ -23,13 +24,15 @@ public class TAPaymentManager {
     
     private init(){}
     
-    public func setup(companyName: String, appleMerchantIdentifier: String, clientId: String = String(), paymentMode: PaymentMode, environment: PaypalPaymentEnvironment) {
+    public func setup(companyName: String, appleMerchantIdentifier: String, clientId: String = String(), paymentMode: PaymentMode, environment: PaypalPaymentEnvironment, completion: @escaping (PaymentSheetResult) -> Void) {
         
         mode = paymentMode
         
         switch paymentMode {
         case .stripe:            
-            StripeManager().setup(appleMerchantIdentifier: appleMerchantIdentifier, companyName: companyName)
+            StripeManager.shared.setup(appleMerchantIdentifier: appleMerchantIdentifier, companyName: companyName) { result in
+                completion(result)
+            }
             
         case .paypal:
             PaypalManager.shared.setup(_clientID: clientId, environment: environment)
