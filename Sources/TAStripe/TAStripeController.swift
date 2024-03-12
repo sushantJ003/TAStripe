@@ -37,7 +37,7 @@ public class TAStripeController: UIViewController {
                 DispatchQueue.main.async {
                     sheet.present(from: self) { paymentResult in
                         StripeManager.shared.prepareResult(sheetResult: paymentResult)
-                        
+                        print("result is \(paymentResult)")
                     }
                 }
             }
