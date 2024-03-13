@@ -23,18 +23,20 @@ class PaypalManager {
     
     var resultComletion: ((Result) -> Void)?
     var payPalNativeClient: PayPalNativeCheckoutClient?
+    let apiClient: PaypalAPIClient = PaypalAPIClient()
     
     private init() {}
     
-    func setup(_clientID: String, environment: PaypalPaymentEnvironment, completion: @escaping (Result) -> Void) {
+    func setup(_clientID: String, environment: PaypalPaymentEnvironment, baseUrlString: String , completion: @escaping (Result) -> Void) {
         let env: Environment = environment == .production ? .live : .sandbox
         
         let config = CoreConfig(clientID: _clientID, environment: env)
         payPalNativeClient = PayPalNativeCheckoutClient(config: config)
+        apiClient.baseURLString = baseUrlString
     }
     
     func initialisePayment() {
-        PaypalAPIClient().getOrderId { orderId in
+        apiClient.getOrderId { orderId in
             guard let orderId = orderId else { return }
             let request = PayPalNativeCheckoutRequest(orderID: orderId)
             Task {

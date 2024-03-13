@@ -11,7 +11,6 @@ import PayPalNativePayments
 import CorePayments
 
 public class TAStripeController: UIViewController {
-    var stripeClient: StripeAPIClient?
     
     @IBOutlet weak var statusLabel: UILabel!
     
@@ -19,7 +18,6 @@ public class TAStripeController: UIViewController {
         super.viewDidLoad()
         switch TAPaymentManager.shared.mode {
         case .stripe:
-            stripeClient = StripeAPIClient()
             self.setupStripeCheckout()
         case .paypal:
             self.startPaypalCheckout()
@@ -27,12 +25,12 @@ public class TAStripeController: UIViewController {
     }
     
     func setupStripeCheckout() {
-        stripeClient?.startCheckout { [weak self] in
+        StripeManager.shared.checkout { [weak self] sheet in
             guard let self = self else {
                 return
             }
             
-            if let sheet = stripeClient?.paymentSheet {
+            if let sheet = sheet {
                 
                 DispatchQueue.main.async {
                     sheet.present(from: self) { paymentResult in

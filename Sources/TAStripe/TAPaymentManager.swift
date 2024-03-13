@@ -30,18 +30,18 @@ public class TAPaymentManager {
     
     private init(){}
     
-    public func setup(companyName: String, appleMerchantIdentifier: String, clientId: String = String(), paymentMode: PaymentMode, environment: PaypalPaymentEnvironment, completion: @escaping (Result) -> Void) {
+    public func setup(companyName: String, appleMerchantIdentifier: String, clientId: String = String(), paymentMode: PaymentMode, environment: PaypalPaymentEnvironment, stripeBaseUrlString: String = String(), paypalBaseUrlString: String = String(), completion: @escaping (Result) -> Void) {
         
         mode = paymentMode
         
         switch paymentMode {
         case .stripe:            
-            StripeManager.shared.setup(appleMerchantIdentifier: appleMerchantIdentifier, companyName: companyName) { result in
+            StripeManager.shared.setup(appleMerchantIdentifier: appleMerchantIdentifier, companyName: companyName, baseUrlString: stripeBaseUrlString) { result in
                 completion(self.getPaymentResult(stripeResult: result))
             }
             
         case .paypal:
-            PaypalManager.shared.setup(_clientID: clientId, environment: environment) { result in
+            PaypalManager.shared.setup(_clientID: clientId, environment: environment, baseUrlString: paypalBaseUrlString) { result in
                 completion(result)
             }
         }

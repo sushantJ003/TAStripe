@@ -7,10 +7,19 @@
 
 import Foundation
 
-struct PaypalAPIClient {
+class PaypalAPIClient {
+    
+    var baseURLString: String? = "https://tabby-aeolian-ophthalmologist.glitch.me/"
+    private var baseURL: URL {
+        if let urlString = self.baseURLString, let url = URL(string: urlString) {
+            return url
+        } else {
+            fatalError()
+        }
+    }
     
     func getOrderId(completion: @escaping (String?) -> Void) {
-        guard let url = URL(string: "https://tabby-aeolian-ophthalmologist.glitch.me/orders") else {return}
+        let url = self.baseURL.appendingPathComponent("orders")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         let task = URLSession.shared.dataTask(with: request, completionHandler: {(data, response, error) in

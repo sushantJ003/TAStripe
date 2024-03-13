@@ -12,9 +12,8 @@ import StripePaymentSheet
 
 class StripeAPIClient: NSObject {
     
-    var paymentSheet: PaymentSheet?
     var baseURLString: String? = "https://equal-sunset-fern.glitch.me/"
-    var baseURL: URL {
+    private var baseURL: URL {
         if let urlString = self.baseURLString, let url = URL(string: urlString) {
             return url
         } else {
@@ -22,7 +21,7 @@ class StripeAPIClient: NSObject {
         }
     }
     
-    public func startCheckout(completion: @escaping () -> Void) {
+    public func startCheckout(completion: @escaping (PaymentSheet?) -> Void) {
         let url = self.baseURL.appendingPathComponent("payment-sheet")
         // MARK: Fetch the PaymentIntent client secret, Ephemeral Key secret, Customer ID, and publishable key
         var request = URLRequest(url: url)
@@ -48,9 +47,9 @@ class StripeAPIClient: NSObject {
             // Set `allowsDelayedPaymentMethods` to true if your business handles
             // delayed notification payment methods like US bank accounts.
             configuration.allowsDelayedPaymentMethods = true
-            self.paymentSheet = PaymentSheet(paymentIntentClientSecret: paymentIntentClientSecret, configuration: configuration)
+            let sheet = PaymentSheet(paymentIntentClientSecret: paymentIntentClientSecret, configuration: configuration)
             print(paymentIntentClientSecret)
-            completion()
+            completion(sheet)
         })
         task.resume()
     
