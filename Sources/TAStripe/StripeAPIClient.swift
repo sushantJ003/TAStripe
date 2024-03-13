@@ -12,7 +12,7 @@ import StripePaymentSheet
 
 class StripeAPIClient: NSObject {
     
-    var baseURLString: String? = "https://equal-sunset-fern.glitch.me/"
+    var baseURLString: String? = ""
     private var baseURL: URL {
         if let urlString = self.baseURLString, let url = URL(string: urlString) {
             return url

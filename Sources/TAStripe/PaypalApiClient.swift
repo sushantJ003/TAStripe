@@ -9,7 +9,7 @@ import Foundation
 
 class PaypalAPIClient {
     
-    var baseURLString: String? = "https://tabby-aeolian-ophthalmologist.glitch.me/"
+    var baseURLString: String? = ""
     private var baseURL: URL {
         if let urlString = self.baseURLString, let url = URL(string: urlString) {
             return url
