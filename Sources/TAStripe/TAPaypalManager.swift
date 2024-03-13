@@ -20,11 +20,13 @@ class PaypalManager {
         let instance = PaypalManager()
         return instance
     }()
+    
+    var resultComletion: ((Result) -> Void)?
     var payPalNativeClient: PayPalNativeCheckoutClient?
     
     private init() {}
     
-    func setup(_clientID: String, environment: PaypalPaymentEnvironment) {
+    func setup(_clientID: String, environment: PaypalPaymentEnvironment, completion: @escaping (Result) -> Void) {
         let env: Environment = environment == .production ? .live : .sandbox
         
         let config = CoreConfig(clientID: _clientID, environment: env)
@@ -42,6 +44,12 @@ class PaypalManager {
     }
     
     func captureOrder(orderId: String) {
-        PaypalAPIClient().captureOrder(orderId: orderId)
+        PaypalAPIClient().captureOrder(orderId: orderId) {
+            PaypalManager.shared.prepareResult(sheetResult: .completed)
+        }
+    }
+    
+    func prepareResult(sheetResult: Result) {
+        resultComletion?(sheetResult)
     }
 }

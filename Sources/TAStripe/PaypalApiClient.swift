@@ -24,7 +24,7 @@ struct PaypalAPIClient {
         task.resume()
     }
     
-    func captureOrder(orderId: String) {
+    func captureOrder(orderId: String, completion: @escaping () -> Void) {
         guard let url = URL(string: "https://tabby-aeolian-ophthalmologist.glitch.me//api/orders/\(orderId)/capture") else {return}
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -35,6 +35,7 @@ struct PaypalAPIClient {
                 return
             }
             print(json)
+            completion()
         })
         task.resume()
     }

@@ -9,6 +9,12 @@ import UIKit
 import Stripe
 import StripePaymentSheet
 
+public enum Result {
+    case completed
+    case cancelled
+    case failure(Error)
+}
+
 public class StripeBundle {
    public static let module = Bundle.module
 }
@@ -24,18 +30,20 @@ public class TAPaymentManager {
     
     private init(){}
     
-    public func setup(companyName: String, appleMerchantIdentifier: String, clientId: String = String(), paymentMode: PaymentMode, environment: PaypalPaymentEnvironment, completion: @escaping (PaymentSheetResult) -> Void) {
+    public func setup(companyName: String, appleMerchantIdentifier: String, clientId: String = String(), paymentMode: PaymentMode, environment: PaypalPaymentEnvironment, completion: @escaping (Result) -> Void) {
         
         mode = paymentMode
         
         switch paymentMode {
         case .stripe:            
             StripeManager.shared.setup(appleMerchantIdentifier: appleMerchantIdentifier, companyName: companyName) { result in
-                completion(result)
+                completion(self.getPaymentResult(stripeResult: result))
             }
             
         case .paypal:
-            PaypalManager.shared.setup(_clientID: clientId, environment: environment)
+            PaypalManager.shared.setup(_clientID: clientId, environment: environment) { result in
+                completion(result)
+            }
         }
     }
     
@@ -44,5 +52,16 @@ public class TAPaymentManager {
             fatalError("ViewController not implemented in storyboard")
         }
         return viewController
+    }
+    
+    private func getPaymentResult(stripeResult: PaymentSheetResult) -> Result {
+        switch stripeResult {
+        case .completed:
+            return Result.completed
+        case .canceled:
+            return Result.cancelled
+        case .failed(let error):
+            return Result.failure(error)
+        }
     }
 }
