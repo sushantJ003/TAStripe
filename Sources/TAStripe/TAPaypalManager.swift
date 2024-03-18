@@ -33,6 +33,7 @@ class PaypalManager {
         let config = CoreConfig(clientID: _clientID, environment: env)
         payPalNativeClient = PayPalNativeCheckoutClient(config: config)
         apiClient.baseURLString = baseUrlString
+        resultComletion = completion
     }
     
     func initialisePayment() {
