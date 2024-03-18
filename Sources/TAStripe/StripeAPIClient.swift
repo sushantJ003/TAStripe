@@ -66,7 +66,7 @@ class StripeAPIClient: NSObject {
                 // Handle error
                 return
             }
-            print(json)
+            print("Payment result: \(json)")
         })
         task.resume()
     }
