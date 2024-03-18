@@ -52,6 +52,7 @@ class PaypalManager {
     }
     
     func prepareResult(sheetResult: Result) {
+        print(sheetResult)
         resultComletion?(sheetResult)
     }
 }
