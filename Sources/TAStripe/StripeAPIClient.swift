@@ -21,19 +21,18 @@ class StripeAPIClient: NSObject {
         }
     }
     
-    public func startCheckout(completion: @escaping (PaymentSheet?) -> Void) {
+    func startCheckout(completion: @escaping (PaymentSheet?) -> Void) {
         let url = self.baseURL.appendingPathComponent("payment-sheet")
         // MARK: Fetch the PaymentIntent client secret, Ephemeral Key secret, Customer ID, and publishable key
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        let task = URLSession.shared.dataTask(with: request, completionHandler: { [weak self] (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
             guard let data = data,
                   let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
                   let customerId = json["customer"] as? String,
                   let customerEphemeralKeySecret = json["ephemeralKey"] as? String,
                   let paymentIntentClientSecret = json["paymentIntent"] as? String,
-                  let publishableKey = json["publishableKey"] as? String,
-                  let self = self else {
+                  let publishableKey = json["publishableKey"] as? String else {
                 // Handle error
                 return
             }
@@ -53,6 +52,23 @@ class StripeAPIClient: NSObject {
         })
         task.resume()
     
+    }
+    
+    func trackPaymentStatus() {
+        let url = self.baseURL.appendingPathComponent("webhook")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+            guard let data = data,
+                  let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any]
+                   else {
+                // Handle error
+                return
+            }
+            print(json)
+        })
+        task.resume()
     }
 
 //    func getCustomer(_ email: String, name: String, success:@escaping (_ responseObject:JSON) -> Void , failure:@escaping (_ errorResponse:JSON?) -> Void) {

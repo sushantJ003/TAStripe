@@ -37,5 +37,9 @@ class StripeManager {
         stripeClient.startCheckout { sheet in
             completion(sheet)
         }
+        
+        DispatchQueue.main.async {
+            self.stripeClient.trackPaymentStatus()
+        }
     }
 }
