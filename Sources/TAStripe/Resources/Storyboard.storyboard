@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Stripe Controller-->
+        <!--Paypal Container View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController storyboardIdentifier="TAStripeController" id="Y6W-OH-hqX" customClass="TAStripeController" customModule="TAStripe" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PaypalContainerViewController" id="Y6W-OH-hqX" customClass="PaypalContainerViewController" customModule="TAStripe" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
