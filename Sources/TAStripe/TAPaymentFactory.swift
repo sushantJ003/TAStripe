@@ -34,6 +34,8 @@ public protocol TAPaymentProtocol {
 }
 
 public struct TAPaymentFactoryManager {
+    public init() {}
+    
     public func getPaymentMethod(mode: PaymentMode, paymentInfo: PaymentInfo) -> TAPaymentProtocol {
         switch mode {
         case .stripe:
