@@ -17,7 +17,7 @@ class StripeManager: StripeManagerProtocol {
         stripeClient = apiClient
     }
     
-    func startCheckout(from controller: UIViewController) async throws -> PaymentResult {
+    func startCheckout(from controller: UIViewController?) async throws -> PaymentResult {
         
         do {
             let sheet = try await checkout()
