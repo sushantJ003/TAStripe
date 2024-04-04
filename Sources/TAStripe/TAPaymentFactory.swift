@@ -33,7 +33,7 @@ public protocol TAPaymentProtocol {
     func startCheckout(from controller: UIViewController) async throws -> PaymentResult
 }
 
-struct TAPaymentFactoryManager {
+public struct TAPaymentFactoryManager {
     func getPaymentMethod(mode: PaymentMode, paymentInfo: PaymentInfo) -> TAPaymentProtocol {
         switch mode {
         case .stripe:
