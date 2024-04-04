@@ -12,10 +12,18 @@ public class StripeBundle {
 }
 
 public struct PaymentInfo {
+    
     let clientId: String
     let environment: PaymentEnvironment
     let absoluteBaseUrl: String
-    let coompanyName: String
+    let companyName: String
+    
+    public init(clientId: String, environment: PaymentEnvironment, absoluteBaseUrl: String, companyName: String) {
+        self.clientId = clientId
+        self.environment = environment
+        self.absoluteBaseUrl = absoluteBaseUrl
+        self.companyName = companyName
+    }
 }
 
 public enum PaymentResult {
