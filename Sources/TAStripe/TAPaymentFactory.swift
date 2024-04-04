@@ -15,7 +15,7 @@ public struct PaymentInfo {
     let clientId: String
     let environment: PaymentEnvironment
     let absoluteBaseUrl: String
-    let completion: (PaymentResult) -> Void
+    let coompanyName: String
 }
 
 public enum PaymentResult {
@@ -29,7 +29,7 @@ public enum PaymentMode {
     case paypal
 }
 
-public protocol TAPaymentProtocol {    
+public protocol TAPaymentProtocol {
     func startCheckout(from controller: UIViewController) async throws -> PaymentResult
 }
 
@@ -45,29 +45,3 @@ public extension TAPaymentFactoryManager {
         }
     }
 }
-
-
-
-
-//TODO:
-
-//extension TAStripeController: PayPalNativeCheckoutDelegate {
-//
-//    public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithError error: CoreSDKError) {
-//        print(error)
-//        PaypalManager.shared.prepareResult(sheetResult: .failure(error))
-//    }
-//
-//    public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithResult result: PayPalNativeCheckoutResult) {
-//        PaypalManager.shared.captureOrder(orderId: result.orderID)
-//    }
-//
-//    public func paypalDidCancel(_ payPalClient: PayPalNativePayments.PayPalNativeCheckoutClient) {
-//        PaypalManager.shared.prepareResult(sheetResult: .cancelled)
-//    }
-//
-//    public func paypalWillStart(_ payPalClient: PayPalNativePayments.PayPalNativeCheckoutClient) {
-//
-//    }
-//}
-
