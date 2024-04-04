@@ -47,7 +47,7 @@ public struct TAPaymentFactoryManager {
     public func getPaymentMethod(mode: PaymentMode, paymentInfo: PaymentInfo) -> TAPaymentProtocol {
         switch mode {
         case .stripe:
-            return StripeManager(with: mode, paymentInfo: paymentInfo, apiClient: StripeAPIClient(baseURLString: paymentInfo.absoluteBaseUrl))
+            return StripeManager(with: mode, paymentInfo: paymentInfo, apiClient: StripeAPIClient(baseURLString: paymentInfo.absoluteBaseUrl, companyName: paymentInfo.companyName))
         case .paypal:
             return PaypalManager(with: mode, paymentInfo: paymentInfo, apiClient: PaypalAPIClient(baseURLString: paymentInfo.absoluteBaseUrl))
         }

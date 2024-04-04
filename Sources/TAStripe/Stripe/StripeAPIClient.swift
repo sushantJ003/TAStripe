@@ -13,6 +13,7 @@ import StripePaymentSheet
 class StripeAPIClient: StripeAPIClientProtocol {
     
     var baseURLString: String
+    var companyName: String
     private var baseURL: URL {
         if let url = URL(string: baseURLString) {
             return url
@@ -21,8 +22,9 @@ class StripeAPIClient: StripeAPIClientProtocol {
         }
     }
     
-    init(baseURLString: String) {
+    init(baseURLString: String, companyName: String) {
         self.baseURLString = baseURLString
+        self.companyName = companyName
     }
     
     func startCheckout() async throws -> PaymentSheet? {
@@ -47,8 +49,8 @@ class StripeAPIClient: StripeAPIClientProtocol {
         STPAPIClient.shared.publishableKey = publishableKey
         
         // MARK: Create a PaymentSheet instance
-        var configuration = PaymentSheet.Configuration()
-        configuration.merchantDisplayName = "Example, Inc."
+        var configuration = PaymentSheet.Configuration()     
+        configuration.merchantDisplayName = companyName
         configuration.customer = .init(id: customerId, ephemeralKeySecret: customerEphemeralKeySecret)
         // Set `allowsDelayedPaymentMethods` to true if your business handles
         // delayed notification payment methods like US bank accounts.
