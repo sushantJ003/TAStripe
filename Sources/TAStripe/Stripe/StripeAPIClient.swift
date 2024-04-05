@@ -1,14 +1,19 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Sushant Jugran on 15/01/24.
 //
 
 import Foundation
-import Stripe
 import UIKit
-import StripePaymentSheet
+
+public struct SheetData {
+    let customerId: String
+    let customerEphemeralKeySecret: String
+    let paymentIntentClientSecret: String
+    let publishableKey: String
+}
 
 class StripeAPIClient: StripeAPIClientProtocol {
     
@@ -27,7 +32,7 @@ class StripeAPIClient: StripeAPIClientProtocol {
         self.companyName = companyName
     }
     
-    func startCheckout() async throws -> PaymentSheet? {
+    func startCheckout() async throws -> SheetData? {
         let url = self.baseURL.appendingPathComponent("payment-sheet")
         // MARK: Fetch the PaymentIntent client secret, Ephemeral Key secret, Customer ID, and publishable key
         var request = URLRequest(url: url)
@@ -46,17 +51,9 @@ class StripeAPIClient: StripeAPIClientProtocol {
             // Handle error
             fatalError("Error while parsing data")
         }
-        STPAPIClient.shared.publishableKey = publishableKey
+        let sheetData = SheetData(customerId: customerId, customerEphemeralKeySecret: customerEphemeralKeySecret, paymentIntentClientSecret: paymentIntentClientSecret, publishableKey: publishableKey)
         
-        // MARK: Create a PaymentSheet instance
-        var configuration = PaymentSheet.Configuration()     
-        configuration.merchantDisplayName = companyName
-        configuration.customer = .init(id: customerId, ephemeralKeySecret: customerEphemeralKeySecret)
-        // Set `allowsDelayedPaymentMethods` to true if your business handles
-        // delayed notification payment methods like US bank accounts.
-        configuration.allowsDelayedPaymentMethods = true
-        let sheet = PaymentSheet(paymentIntentClientSecret: paymentIntentClientSecret, configuration: configuration)
-        return sheet
+        return sheetData
     }
     
     func trackPaymentStatus() {

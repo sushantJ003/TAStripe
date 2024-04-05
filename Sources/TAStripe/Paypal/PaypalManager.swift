@@ -20,13 +20,16 @@ class PaypalManager: PaypalManagerProtocol {
     var payPalNativeClient: PayPalNativeCheckoutClient?
     var apiClient: PaypalAPIClientProtocol?
     
-    required init(with mode: PaymentMode, paymentInfo: PaymentInfo, apiClient: PaypalAPIClientProtocol) {
+    init(apiClient: PaypalAPIClientProtocol) {
+        self.apiClient = apiClient
+    }
+    
+    required init(paymentInfo: PaymentInfo, apiClient: PaypalAPIClientProtocol) {
         let env: Environment = paymentInfo.environment == .production ? .live : .sandbox
         
         let config = CoreConfig(clientID: paymentInfo.clientId, environment: env)
         payPalNativeClient = PayPalNativeCheckoutClient(config: config)
         self.apiClient = apiClient
-        
     }
     
     func startCheckout(from controller: UIViewController?) async throws -> PaymentResult {
@@ -35,7 +38,12 @@ class PaypalManager: PaypalManagerProtocol {
             payPalNativeClient?.delegate = container
         }
         
-        await initialisePayment()
+        let orderId = try await initialisePayment()
+        
+        let request = PayPalNativeCheckoutRequest(orderID: orderId)
+        
+        await self.payPalNativeClient?.start(request: request)
+        
         return try await withCheckedThrowingContinuation { continuation in
             resultContinuation = continuation
         }
@@ -50,29 +58,24 @@ class PaypalManager: PaypalManagerProtocol {
         return viewController
     }
     
-    func initialisePayment() async {
+    func initialisePayment() async throws -> String {
         
         do {
             guard let orderId = try await apiClient?.getOrderId() else { fatalError("Could not get orderId") }
-            
-            let request = PayPalNativeCheckoutRequest(orderID: orderId)
-            
-            await self.payPalNativeClient?.start(request: request)
+            return orderId
             
         } catch {
-            debugPrint("Error: \(error)")
+            throw error
         }
     }
     
-    func captureOrder(orderId: String) {
-        Task.init {
-            do {
-                try await apiClient?.captureOrder(orderId: orderId)
-                self.prepareResult(sheetResult: .completed)
-                
-            } catch {
-                debugPrint("Error: \(error)")
-            }
+    func captureOrder(orderId: String) async throws {
+        do {
+            try await apiClient?.captureOrder(orderId: orderId)
+            return
+            
+        } catch {
+            throw error
         }
     }
     

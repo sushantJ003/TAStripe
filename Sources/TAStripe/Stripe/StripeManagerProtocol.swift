@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol StripeManagerProtocol: TAPaymentProtocol {
-    init(with mode: PaymentMode, paymentInfo: PaymentInfo, apiClient: StripeAPIClientProtocol)
+    init(paymentInfo: PaymentInfo, apiClient: StripeAPIClientProtocol)
 }

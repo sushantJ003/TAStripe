@@ -8,7 +8,8 @@
 import Foundation
 
 public protocol PaypalManagerProtocol: TAPaymentProtocol, AnyObject {
-    init(with mode: PaymentMode, paymentInfo: PaymentInfo, apiClient: PaypalAPIClientProtocol)
-    func captureOrder(orderId: String)
     var resultContinuation: CheckedContinuation<PaymentResult, Error>? {get set}
+    init(paymentInfo: PaymentInfo, apiClient: PaypalAPIClientProtocol)
+    func captureOrder(orderId: String) async throws
+    func prepareResult(sheetResult: PaymentResult)
 }

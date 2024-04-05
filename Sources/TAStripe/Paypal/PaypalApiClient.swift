@@ -44,14 +44,10 @@ class PaypalAPIClient: PaypalAPIClientProtocol {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (_, response) = try await URLSession.shared.data(for: request)
         
         guard (response as? HTTPURLResponse)?.statusCode == 200 else { fatalError("Error while fetching data") }
         
-        guard let _ = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any]
-               else {
-            fatalError("Error while parsing data")
-        }
         return
     }
 }

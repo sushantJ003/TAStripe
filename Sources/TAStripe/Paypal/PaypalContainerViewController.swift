@@ -29,7 +29,11 @@ extension PaypalContainerViewController: PayPalNativeCheckoutDelegate {
     }
 
     public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithResult result: PayPalNativeCheckoutResult) {
-        paypalManager?.captureOrder(orderId: result.orderID)
+        Task.init {
+            try await paypalManager?.captureOrder(orderId: result.orderID)
+        }
+        
+        paypalManager?.prepareResult(sheetResult: .completed)
     }
 
     public func paypalDidCancel(_ payPalClient: PayPalNativePayments.PayPalNativeCheckoutClient) {

@@ -11,6 +11,5 @@ import StripePaymentSheet
 public protocol StripeAPIClientProtocol {
     var baseURLString: String {get set}
     var companyName: String {get set}
-    func startCheckout() async throws -> PaymentSheet?
-    func trackPaymentStatus()
+    func startCheckout() async throws -> SheetData?    
 }
