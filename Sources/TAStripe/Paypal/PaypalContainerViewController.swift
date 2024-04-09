@@ -11,13 +11,13 @@ import CorePayments
 
 class PaypalContainerViewController: UIViewController {
     
-    weak var paypalManager: PaypalManagerProtocol?
+    var manager: TAPaymentProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-    }
+    }    
     
 }
 
@@ -25,18 +25,18 @@ extension PaypalContainerViewController: PayPalNativeCheckoutDelegate {
 
     public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithError error: CoreSDKError) {
         print(error)
-        paypalManager?.resultContinuation?.resume(throwing: error)
+        (manager as? PaypalManagerProtocol)?.resultContinuation?.resume(throwing: error)
     }
 
     public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithResult result: PayPalNativeCheckoutResult) {
         Task.init {
-            try await paypalManager?.captureOrder(orderId: result.orderID)
-            paypalManager?.prepareResult(sheetResult: .completed)
+            try await (manager as? PaypalManagerProtocol)?.captureOrder(orderId: result.orderID)
+            (manager as? PaypalManagerProtocol)?.prepareResult(sheetResult: .completed)
         }
     }
 
     public func paypalDidCancel(_ payPalClient: PayPalNativePayments.PayPalNativeCheckoutClient) {
-        paypalManager?.resultContinuation?.resume(returning: .cancelled)
+        (manager as? PaypalManagerProtocol)?.resultContinuation?.resume(returning: .cancelled)
     }
 
     public func paypalWillStart(_ payPalClient: PayPalNativePayments.PayPalNativeCheckoutClient) {
