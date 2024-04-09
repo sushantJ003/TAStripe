@@ -37,7 +37,7 @@ class StripeManager: StripeManagerProtocol {
             Task.init { @MainActor in
                 var result: PaymentResult = .cancelled
                 
-                guard let viewController = UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? PaypalContainerViewController else {
+                guard let viewController = controller else {
                     fatalError("ViewController not implemented in storyboard")
                 }
                                 
