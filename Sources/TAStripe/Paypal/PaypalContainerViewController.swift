@@ -11,7 +11,7 @@ import CorePayments
 
 class PaypalContainerViewController: UIViewController {
     
-    var manager: TAPaymentProtocol?
+    weak var manager: TAPaymentProtocol?
     
     
     override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {

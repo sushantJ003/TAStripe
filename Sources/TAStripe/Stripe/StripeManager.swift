@@ -28,12 +28,12 @@ class StripeManager: StripeManagerProtocol {
         }
         viewController.manager = self
         Task.init {
-            await action(try await startCheckout())
+            await action(try await startCheckout(with: viewController))
         }
         return viewController
     }
     
-    func startCheckout() async throws -> PaymentResult {
+    func startCheckout(with controller: UIViewController) async throws -> PaymentResult {
         
 //        do {
 //            guard let sheetData = try await checkout() else {
@@ -49,7 +49,7 @@ class StripeManager: StripeManagerProtocol {
                 
                 var result: PaymentResult = .cancelled
                                 
-                sheet.present(from: self.getContainerController()) { [weak self] paymentResult in
+                sheet.present(from: controller) { [weak self] paymentResult in
                     result = self?.getPaymentResult(stripeResult: paymentResult) ?? .cancelled
                     self?.resultContinuation?.resume(returning: result)
                 }

@@ -37,8 +37,7 @@ public enum PaymentMode {
     case paypal
 }
 
-public protocol TAPaymentProtocol {
-    func startCheckout() async throws -> PaymentResult
+public protocol TAPaymentProtocol: AnyObject {    
     func getContainerController(action: @escaping (PaymentResult) async -> Void) -> UIViewController
 }
 
