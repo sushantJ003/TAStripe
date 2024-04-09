@@ -38,10 +38,9 @@ public enum PaymentMode {
 }
 
 public protocol TAPaymentProtocol {
-    func startCheckout(from controller: UIViewController?) async throws -> PaymentResult
-    func getContainerController() -> UIViewController
+    func startCheckout() async throws -> PaymentResult
+    func getContainerController(action: @escaping () async -> PaymentResult) -> UIViewController
 }
-
 
 public struct TAPaymentFactoryManager {
     public init() {}

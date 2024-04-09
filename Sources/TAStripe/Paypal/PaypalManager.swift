@@ -40,7 +40,7 @@ class PaypalManager: PaypalManagerProtocol {
         return viewController
     }
     
-    func startCheckout(from controller: UIViewController?) async throws -> PaymentResult {
+    func startCheckout() async throws -> PaymentResult {
         Task.init {
             guard let container = getContainerController() as? PaypalContainerViewController else { fatalError() }
             payPalNativeClient?.delegate = container

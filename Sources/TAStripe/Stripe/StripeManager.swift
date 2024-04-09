@@ -22,7 +22,7 @@ class StripeManager: StripeManagerProtocol {
         stripeClient = apiClient
     }
     
-    func getContainerController() -> UIViewController {
+    func getContainerController(action: @escaping () async -> PaymentResult) -> UIViewController {
         guard let viewController = UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? PaypalContainerViewController else {
             fatalError("ViewController not implemented in storyboard")
         }
@@ -30,7 +30,7 @@ class StripeManager: StripeManagerProtocol {
         return viewController
     }
     
-    func startCheckout(from controller: UIViewController?) async throws -> PaymentResult {
+    func startCheckout() async throws -> PaymentResult {
         
 //        do {
 //            guard let sheetData = try await checkout() else {
@@ -44,11 +44,9 @@ class StripeManager: StripeManagerProtocol {
         
             Task.init { @MainActor in
                 
-                let container = self.getContainerController()
-                controller?.present(container, animated: true)
                 var result: PaymentResult = .cancelled
                                 
-                sheet.present(from: container) { [weak self] paymentResult in
+                sheet.present(from: self.getContainerController()) { [weak self] paymentResult in
                     result = self?.getPaymentResult(stripeResult: paymentResult) ?? .cancelled
                     self?.resultContinuation?.resume(returning: result)
                 }
