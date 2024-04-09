@@ -39,6 +39,16 @@ public enum PaymentMode {
 
 public protocol TAPaymentProtocol {
     func startCheckout(from controller: UIViewController?) async throws -> PaymentResult
+    func getContainerController() -> UIViewController
+}
+
+public extension TAPaymentProtocol {
+    func getContainerController() -> UIViewController {
+        guard let viewController = UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? PaypalContainerViewController else {
+            fatalError("ViewController not implemented in storyboard")
+        }
+        return viewController
+    }
 }
 
 public struct TAPaymentFactoryManager {
