@@ -29,7 +29,9 @@ class StripeManager: StripeManagerProtocol {
         viewController.manager = self
         Task.init {
             action(try await startCheckout(with: viewController))
+            print("abc")
         }
+        print("asdadas")
         return viewController
     }
     
