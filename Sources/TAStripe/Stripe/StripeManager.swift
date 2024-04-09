@@ -33,15 +33,14 @@ class StripeManager: StripeManagerProtocol {
                     let sheetData: SheetData = SheetData(customerId: "cus_PtKkOtaWUKrw0t", customerEphemeralKeySecret: "ek_test_YWNjdF8xT1lxcDdTRXNGYXg0WG0xLGdqUzBuU25PalgxYko3ZkZUS0ROOW5lZ2xuQWVCNlg_00K7RbIb7T", paymentIntentClientSecret: "pi_3P3Y5SSEsFax4Xm11lXDj1qL_secret_mv1fhPpGWvvHQHHvQpcnvhrck", publishableKey: "pk_test_51OYqp7SEsFax4Xm15rybeR0SJpHBnbfrkwGedhk6L2LGi2GQOKQ5AL6tHoOvfcb1Lzj9Ia68i1KOcAHfxNUM0d4200XfijdMJd")
             
             let sheet = preparePaymentSheet(from: sheetData)
-            
+        
             Task.init { @MainActor in
-                var result: PaymentResult = .cancelled
                 
-                guard let viewController = controller else {
-                    fatalError("ViewController not implemented in storyboard")
-                }
+                let container = self.getContainerController()
+                controller?.present(container, animated: true)
+                var result: PaymentResult = .cancelled
                                 
-                sheet.present(from: viewController) { [weak self] paymentResult in
+                sheet.present(from: container) { [weak self] paymentResult in
                     result = self?.getPaymentResult(stripeResult: paymentResult) ?? .cancelled
                     self?.resultContinuation?.resume(returning: result)
                 }
