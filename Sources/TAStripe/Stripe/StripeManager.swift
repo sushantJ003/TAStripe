@@ -12,6 +12,7 @@ import Stripe
 class StripeManager: StripeManagerProtocol {
         
     var stripeClient: StripeAPIClientProtocol
+    var resultContinuation: CheckedContinuation<PaymentResult, Error>?
     
     required init(paymentInfo: PaymentInfo ,apiClient: StripeAPIClientProtocol) {
         stripeClient = apiClient
@@ -39,16 +40,20 @@ class StripeManager: StripeManagerProtocol {
                     fatalError("ViewController not implemented in storyboard")
                 }
                                 
-                sheet.present(from: viewController) { paymentResult in
-                    result = self.getPaymentResult(stripeResult: paymentResult)
+                sheet.present(from: viewController) { [weak self] paymentResult in
+                    result = self?.getPaymentResult(stripeResult: paymentResult) ?? .cancelled
+                    self?.resultContinuation?.resume(returning: result)
                 }
-                return result
             }
             
 //        } catch {
 //            throw error
 //        }
-        throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Something unexted happened"])
+        
+        return try await withCheckedThrowingContinuation { continuation in
+            resultContinuation = continuation
+        }
+//        throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Something unexted happened"])
     }
     
     func checkout() async throws -> SheetData? {
