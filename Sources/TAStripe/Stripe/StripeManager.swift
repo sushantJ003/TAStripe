@@ -32,14 +32,13 @@ class StripeManager: StripeManagerProtocol {
             
             let sheet = preparePaymentSheet(from: sheetData)
             
-            Task.init {
+            Task.init { @MainActor in
                 var result: PaymentResult = .cancelled
                 
-                guard let viewController = await UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? PaypalContainerViewController else {
+                guard let viewController = UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? PaypalContainerViewController else {
                     fatalError("ViewController not implemented in storyboard")
                 }
-                
-                
+                                
                 sheet.present(from: viewController) { paymentResult in
                     result = self.getPaymentResult(stripeResult: paymentResult)
                 }
