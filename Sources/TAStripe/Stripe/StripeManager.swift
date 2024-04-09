@@ -22,11 +22,14 @@ class StripeManager: StripeManagerProtocol {
         stripeClient = apiClient
     }
     
-    func getContainerController(action: @escaping () async -> PaymentResult) -> UIViewController {
+    func getContainerController(action: @escaping (PaymentResult) async -> Void) -> UIViewController {
         guard let viewController = UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? PaypalContainerViewController else {
             fatalError("ViewController not implemented in storyboard")
         }
         viewController.manager = self
+        Task.init {
+            await action(try await startCheckout())
+        }
         return viewController
     }
     
