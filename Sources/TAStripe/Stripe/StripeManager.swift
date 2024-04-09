@@ -23,15 +23,18 @@ class StripeManager: StripeManagerProtocol {
     
     func startCheckout(from controller: UIViewController?) async throws -> PaymentResult {
         
-        do {
-            guard let sheetData = try await checkout() else {
-                throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to get payment sheet"])
-            }
+//        do {
+//            guard let sheetData = try await checkout() else {
+//                throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to get payment sheet"])
+//            }
+//            
+        let sheetData: SheetData = SheetData(customerId: "cus_PtKkOtaWUKrw0t", customerEphemeralKeySecret: "ek_test_YWNjdF8xT1lxcDdTRXNGYXg0WG0xLGdqUzBuU25PalgxYko3ZkZUS0ROOW5lZ2xuQWVCNlg_00K7RbIb7T", paymentIntentClientSecret: "pi_3P3Y5SSEsFax4Xm11lXDj1qL_secret_mv1fhPpGWvvHQHHvQpcnvhrck", publishableKey: "pk_test_51OYqp7SEsFax4Xm15rybeR0SJpHBnbfrkwGedhk6L2LGi2GQOKQ5AL6tHoOvfcb1Lzj9Ia68i1KOcAHfxNUM0d4200XfijdMJd")
+            
             let sheet = preparePaymentSheet(from: sheetData)
             
             Task.init {
                 var result: PaymentResult = .cancelled
-                                
+                
                 guard let viewController = await UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? PaypalContainerViewController else {
                     fatalError("ViewController not implemented in storyboard")
                 }
@@ -43,9 +46,9 @@ class StripeManager: StripeManagerProtocol {
                 return result
             }
             
-        } catch {
-            throw error
-        }
+//        } catch {
+//            throw error
+//        }
         throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Something unexted happened"])
     }
     
