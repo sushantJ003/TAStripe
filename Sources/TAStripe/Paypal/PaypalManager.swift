@@ -19,6 +19,7 @@ class PaypalManager: PaypalManagerProtocol {
     var resultContinuation: CheckedContinuation<PaymentResult, Error>?
     var payPalNativeClient: PayPalNativeCheckoutClient?
     var apiClient: PaypalAPIClientProtocol?
+    var completion: ((PaymentResult) -> Void)!
     
     init(apiClient: PaypalAPIClientProtocol) {
         self.apiClient = apiClient
@@ -37,26 +38,20 @@ class PaypalManager: PaypalManagerProtocol {
             fatalError("ViewController not implemented in storyboard")
         }
         viewController.manager = self
-        Task.init {
-            action(try await startCheckout(with: viewController))
-        }
+        self.completion = action
         return viewController
     }
     
-    func startCheckout(with controller: UIViewController) async throws -> PaymentResult {
+    func startCheckout(with controller: UIViewController) {
+        guard let container = controller as? PaypalContainerViewController else { fatalError() }
+        payPalNativeClient?.delegate = container
+        
         Task.init {
-            guard let container = controller as? PaypalContainerViewController else { fatalError() }
-            payPalNativeClient?.delegate = container
-        }
-        
-        let orderId = try await initialisePayment()
-        
-        let request = PayPalNativeCheckoutRequest(orderID: orderId)
-        
-        await self.payPalNativeClient?.start(request: request)
-        
-        return try await withCheckedThrowingContinuation { continuation in
-            resultContinuation = continuation
+            let orderId = try await initialisePayment()
+            
+            let request = PayPalNativeCheckoutRequest(orderID: orderId)
+            
+            await self.payPalNativeClient?.start(request: request)
         }
     }
     
@@ -82,6 +77,6 @@ class PaypalManager: PaypalManagerProtocol {
     }
     
     func prepareResult(sheetResult: PaymentResult) {
-        resultContinuation?.resume(returning: sheetResult)
+        completion(sheetResult)
     }
 }

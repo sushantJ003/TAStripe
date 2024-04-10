@@ -7,6 +7,6 @@
 
 import Foundation
 
-public protocol StripeManagerProtocol: TAPaymentProtocol {
+protocol StripeManagerProtocol: BasePaymentProtocol {
     init(paymentInfo: PaymentInfo, apiClient: StripeAPIClientProtocol)
 }

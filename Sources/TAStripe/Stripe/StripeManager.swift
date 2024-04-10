@@ -13,7 +13,7 @@ class StripeManager: StripeManagerProtocol {
         
     var stripeClient: StripeAPIClientProtocol
     var resultContinuation: CheckedContinuation<PaymentResult, Error>?
-    var action: ((PaymentResult) -> Void)!
+    var completion: ((PaymentResult) -> Void)!
     
     required init(paymentInfo: PaymentInfo ,apiClient: StripeAPIClientProtocol) {
         stripeClient = apiClient
@@ -28,7 +28,11 @@ class StripeManager: StripeManagerProtocol {
             fatalError("ViewController not implemented in storyboard")
         }
         viewController.manager = self
-        self.action = action
+//        Task.init {
+//            action(try await startCheckout(with: viewController))
+//            print("abc")
+//        }
+        self.completion = action
         return viewController
     }
     
@@ -50,7 +54,7 @@ class StripeManager: StripeManagerProtocol {
                                 
                 sheet.present(from: controller) { [weak self] paymentResult in
                     result = self?.getPaymentResult(stripeResult: paymentResult) ?? .cancelled
-                    self?.action(result)
+                    self?.completion(result)
 //                    self?.resultContinuation?.resume(returning: result)
                 }
             }

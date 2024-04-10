@@ -11,7 +11,7 @@ import CorePayments
 
 class PaypalContainerViewController: UIViewController {
     
-    weak var manager: TAPaymentProtocol?
+    weak var manager: BasePaymentProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()

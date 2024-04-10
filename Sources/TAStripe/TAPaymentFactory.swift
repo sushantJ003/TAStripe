@@ -37,9 +37,13 @@ public enum PaymentMode {
     case paypal
 }
 
+protocol BasePaymentProtocol: TAPaymentProtocol {
+    func startCheckout(with controller: UIViewController)
+    var completion: ((PaymentResult) -> Void)! { get set }
+}
+
 public protocol TAPaymentProtocol: AnyObject {
     func getContainerController(action: @escaping (PaymentResult) -> Void) -> UIViewController
-    func startCheckout(with controller: UIViewController)
 }
 
 public struct TAPaymentFactoryManager {

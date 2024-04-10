@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol PaypalManagerProtocol: TAPaymentProtocol, AnyObject {
+protocol PaypalManagerProtocol: BasePaymentProtocol, AnyObject {
     var resultContinuation: CheckedContinuation<PaymentResult, Error>? {get set}
     init(paymentInfo: PaymentInfo, apiClient: PaypalAPIClientProtocol)
     func captureOrder(orderId: String) async throws
