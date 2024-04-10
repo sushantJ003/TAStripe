@@ -43,7 +43,7 @@ protocol BasePaymentProtocol: TAPaymentProtocol {
 }
 
 public protocol TAPaymentProtocol: AnyObject {
-    func getContainerController(action: @escaping (PaymentResult) -> Void) -> UIViewController
+    func getPaymentContainerWith(result: @escaping (PaymentResult) -> Void) -> UIViewController
 }
 
 public struct TAPaymentFactoryManager {

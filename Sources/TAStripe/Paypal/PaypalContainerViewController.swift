@@ -1,6 +1,6 @@
 //
 //  PaymentContainerViewController.swift
-//  
+//
 //
 //  Created by Sushant Jugran on 04/04/24.
 //
@@ -15,30 +15,28 @@ class PaypalContainerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("viewdidload called")
-            manager?.startCheckout(with: self)
-        
+        manager?.startCheckout(with: self)
     }
 }
 
 extension PaypalContainerViewController: PayPalNativeCheckoutDelegate {
-
+    
     public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithError error: CoreSDKError) {
         print(error)
         (manager as? PaypalManagerProtocol)?.completion(.failure(error))
     }
-
+    
     public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithResult result: PayPalNativeCheckoutResult) {
         Task.init {
             try await (manager as? PaypalManagerProtocol)?.captureOrder(orderId: result.orderID)
             (manager as? PaypalManagerProtocol)?.prepareResult(sheetResult: .completed)
         }
     }
-
+    
     public func paypalDidCancel(_ payPalClient: PayPalNativePayments.PayPalNativeCheckoutClient) {
         (manager as? PaypalManagerProtocol)?.completion(.cancelled)
     }
-
+    
     public func paypalWillStart(_ payPalClient: PayPalNativePayments.PayPalNativeCheckoutClient) {
     }
 }
