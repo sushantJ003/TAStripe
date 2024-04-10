@@ -49,9 +49,8 @@ class StripeManager: StripeManagerProtocol {
                 var result: PaymentResult = .cancelled
                                 
                 sheet.present(from: controller) { [weak self] paymentResult in
-                    result = self?.getPaymentResult(stripeResult: paymentResult) ?? .cancelled
-                    controller.dismiss(animated: true)
-                    self?.completion(result)                    
+                    result = self?.getPaymentResult(stripeResult: paymentResult) ?? .cancelled                    
+                    self?.completion(result)
                 }
             }
     }
