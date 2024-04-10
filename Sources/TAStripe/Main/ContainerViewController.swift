@@ -12,14 +12,9 @@ import CorePayments
 class ContainerViewController: UIViewController {
     
     weak var manager: BasePaymentProtocol?
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationItem.setHidesBackButton(true, animated: true)
-    }
-    
+ 
     override func viewDidLoad() {
-        super.viewDidLoad()        
+        super.viewDidLoad()
         manager?.startCheckout(with: self)
     }
 }
