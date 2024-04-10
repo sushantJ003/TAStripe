@@ -33,7 +33,7 @@ class PaypalManager: PaypalManagerProtocol {
     }
     
     func getPaymentContainerWith(result: @escaping (PaymentResult) -> Void) -> UIViewController {
-        guard let viewController = UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? PaypalContainerViewController else {
+        guard let viewController = UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? ContainerViewController else {
             fatalError("ViewController not implemented in storyboard")
         }
         viewController.manager = self
@@ -42,7 +42,7 @@ class PaypalManager: PaypalManagerProtocol {
     }
     
     func startCheckout(with controller: UIViewController) {
-        guard let container = controller as? PaypalContainerViewController else { fatalError() }
+        guard let container = controller as? ContainerViewController else { fatalError() }
         payPalNativeClient?.delegate = container
         
         Task.init {

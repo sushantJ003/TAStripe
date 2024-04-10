@@ -9,17 +9,18 @@ import UIKit
 import PayPalNativePayments
 import CorePayments
 
-class PaypalContainerViewController: UIViewController {
+class ContainerViewController: UIViewController {
     
     weak var manager: BasePaymentProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.setHidesBackButton(true, animated: true)
         manager?.startCheckout(with: self)
     }
 }
 
-extension PaypalContainerViewController: PayPalNativeCheckoutDelegate {
+extension ContainerViewController: PayPalNativeCheckoutDelegate {
     
     public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithError error: CoreSDKError) {
         print(error)

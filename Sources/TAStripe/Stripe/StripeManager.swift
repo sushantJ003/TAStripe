@@ -24,7 +24,7 @@ class StripeManager: StripeManagerProtocol {
     }
     
     func getPaymentContainerWith(result: @escaping (PaymentResult) -> Void) -> UIViewController {
-        guard let viewController = UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? PaypalContainerViewController else {
+        guard let viewController = UIStoryboard(name: "Storyboard", bundle: StripeBundle.module).instantiateInitialViewController() as? ContainerViewController else {
             fatalError("ViewController not implemented in storyboard")
         }
         viewController.manager = self
@@ -34,25 +34,26 @@ class StripeManager: StripeManagerProtocol {
     
     func startCheckout(with controller: UIViewController) {
         
-//        do {
-//            guard let sheetData = try await checkout() else {
-//                throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to get payment sheet"])
-//            }
-            
-            
-                    let sheetData: SheetData = SheetData(customerId: "cus_Pte59UnVy4CCJL", customerEphemeralKeySecret: "ek_test_YWNjdF8xT1lxcDdTRXNGYXg0WG0xLGM0QVlQdEpYUllQM1Q2MUJKWTJkR1lQQ1VITHp1N3g_008X8pxWUT", paymentIntentClientSecret: "pi_3P3qnTSEsFax4Xm11A0zq1TP_secret_5w7zJNlZSFuVWxF5uZH75yt5R", publishableKey: "pk_test_51OYqp7SEsFax4Xm15rybeR0SJpHBnbfrkwGedhk6L2LGi2GQOKQ5AL6tHoOvfcb1Lzj9Ia68i1KOcAHfxNUM0d4200XfijdMJd")
-            
-            let sheet = preparePaymentSheet(from: sheetData)
+        //        do {
+        //            guard let sheetData = try await checkout() else {
+        //                throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to get payment sheet"])
+        //            }
         
-            Task.init { @MainActor in
-                
-                var result: PaymentResult = .cancelled
-                                
-                sheet.present(from: controller) { [weak self] paymentResult in
-                    result = self?.getPaymentResult(stripeResult: paymentResult) ?? .cancelled                    
-                    self?.completion(result)
-                }
+        
+        let sheetData: SheetData = SheetData(customerId: "cus_Pte59UnVy4CCJL", customerEphemeralKeySecret: "ek_test_YWNjdF8xT1lxcDdTRXNGYXg0WG0xLGM0QVlQdEpYUllQM1Q2MUJKWTJkR1lQQ1VITHp1N3g_008X8pxWUT", paymentIntentClientSecret: "pi_3P3qnTSEsFax4Xm11A0zq1TP_secret_5w7zJNlZSFuVWxF5uZH75yt5R", publishableKey: "pk_test_51OYqp7SEsFax4Xm15rybeR0SJpHBnbfrkwGedhk6L2LGi2GQOKQ5AL6tHoOvfcb1Lzj9Ia68i1KOcAHfxNUM0d4200XfijdMJd")
+        
+        let sheet = preparePaymentSheet(from: sheetData)
+        
+        Task.init { @MainActor in
+            
+            var result: PaymentResult = .cancelled
+            
+            sheet.present(from: controller) { [weak self] paymentResult in
+                result = self?.getPaymentResult(stripeResult: paymentResult) ?? .cancelled                
+                self?.completion(result)
+                controller.navigationController?.popViewController(animated: true)
             }
+        }
     }
     
     func checkout() async throws -> SheetData? {
