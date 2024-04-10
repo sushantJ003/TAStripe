@@ -27,7 +27,7 @@ class PaypalManager: PaypalManagerProtocol {
     required init(paymentInfo: PaymentInfo, apiClient: PaypalAPIClientProtocol) {
         let env: Environment = paymentInfo.environment == .production ? .live : .sandbox
         
-        let config = CoreConfig(clientID: paymentInfo.clientId, environment: env)
+        let config = CoreConfig(clientID: paymentInfo.paypalClientId, environment: env)
         payPalNativeClient = PayPalNativeCheckoutClient(config: config)
         self.apiClient = apiClient
     }
