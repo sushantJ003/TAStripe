@@ -51,6 +51,7 @@ class StripeManager: StripeManagerProtocol {
                 sheet.present(from: controller) { [weak self] paymentResult in
                     result = self?.getPaymentResult(stripeResult: paymentResult) ?? .cancelled
                     self?.completion(result)
+                    controller.dismiss(animated: true)
                 }
             }
     }
