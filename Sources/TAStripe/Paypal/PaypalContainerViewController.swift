@@ -13,18 +13,12 @@ class PaypalContainerViewController: UIViewController {
     
     weak var manager: TAPaymentProtocol?
     
-    
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        super.dismiss(animated: flag, completion: completion)
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
-    }    
-    
+            manager?.startCheckout(with: self)
+        
+    }
 }
 
 extension PaypalContainerViewController: PayPalNativeCheckoutDelegate {

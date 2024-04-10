@@ -13,6 +13,7 @@ class StripeManager: StripeManagerProtocol {
         
     var stripeClient: StripeAPIClientProtocol
     var resultContinuation: CheckedContinuation<PaymentResult, Error>?
+    var action: ((PaymentResult) -> Void)!
     
     required init(paymentInfo: PaymentInfo ,apiClient: StripeAPIClientProtocol) {
         stripeClient = apiClient
@@ -27,15 +28,11 @@ class StripeManager: StripeManagerProtocol {
             fatalError("ViewController not implemented in storyboard")
         }
         viewController.manager = self
-        Task.init {
-            action(try await startCheckout(with: viewController))
-            print("abc")
-        }
-        print("asdadas")
+        self.action = action
         return viewController
     }
     
-    func startCheckout(with controller: UIViewController) async throws -> PaymentResult {
+    func startCheckout(with controller: UIViewController) {
         
 //        do {
 //            guard let sheetData = try await checkout() else {
@@ -53,7 +50,8 @@ class StripeManager: StripeManagerProtocol {
                                 
                 sheet.present(from: controller) { [weak self] paymentResult in
                     result = self?.getPaymentResult(stripeResult: paymentResult) ?? .cancelled
-                    self?.resultContinuation?.resume(returning: result)
+                    self?.action(result)
+//                    self?.resultContinuation?.resume(returning: result)
                 }
             }
             
@@ -61,9 +59,9 @@ class StripeManager: StripeManagerProtocol {
 //            throw error
 //        }
 //        
-        return try await withCheckedThrowingContinuation { continuation in
-            resultContinuation = continuation
-        }
+//        return try await withCheckedThrowingContinuation { continuation in
+//            resultContinuation = continuation
+//        }
 //        throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Something unexted happened"])
     }
     
