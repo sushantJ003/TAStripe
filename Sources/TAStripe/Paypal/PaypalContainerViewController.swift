@@ -15,7 +15,7 @@ class PaypalContainerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("viewdidload called")
             manager?.startCheckout(with: self)
         
     }
