@@ -20,6 +20,7 @@ class ContainerViewController: UIViewController {
     }
 }
 
+// delegate methods of Paypal checkout sheet
 extension ContainerViewController: PayPalNativeCheckoutDelegate {
     
     public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithError error: CoreSDKError) {
