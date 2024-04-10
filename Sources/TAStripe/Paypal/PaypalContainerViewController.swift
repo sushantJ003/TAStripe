@@ -25,7 +25,7 @@ extension PaypalContainerViewController: PayPalNativeCheckoutDelegate {
 
     public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithError error: CoreSDKError) {
         print(error)
-        (manager as? PaypalManagerProtocol)?.resultContinuation?.resume(throwing: error)
+        (manager as? PaypalManagerProtocol)?.completion(.failure(error))
     }
 
     public func paypal(_ payPalClient: PayPalNativeCheckoutClient, didFinishWithResult result: PayPalNativeCheckoutResult) {
@@ -36,7 +36,7 @@ extension PaypalContainerViewController: PayPalNativeCheckoutDelegate {
     }
 
     public func paypalDidCancel(_ payPalClient: PayPalNativePayments.PayPalNativeCheckoutClient) {
-        (manager as? PaypalManagerProtocol)?.resultContinuation?.resume(returning: .cancelled)
+        (manager as? PaypalManagerProtocol)?.completion(.cancelled)
     }
 
     public func paypalWillStart(_ payPalClient: PayPalNativePayments.PayPalNativeCheckoutClient) {

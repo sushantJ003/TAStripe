@@ -16,7 +16,6 @@ public enum PaymentEnvironment {
 
 class PaypalManager: PaypalManagerProtocol {
     
-    var resultContinuation: CheckedContinuation<PaymentResult, Error>?
     var payPalNativeClient: PayPalNativeCheckoutClient?
     var apiClient: PaypalAPIClientProtocol?
     var completion: ((PaymentResult) -> Void)!
